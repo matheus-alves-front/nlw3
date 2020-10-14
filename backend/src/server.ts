@@ -1,38 +1,19 @@
 import express from 'express';
+import cors from 'cors';
+import 'express-async-errors';
+import path from 'path';
 
 import './database/connection';
+import routes from './routes';
+import errorHandler from './errors/handler';
 
 const app = express();
 
+app.use(cors);
 app.use(express.json());
+app.use(routes);
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use(errorHandler);
 
-app.get('/users', (request, response) => {
-    return response.json({ message: 'hello world' });
-});
 
 app.listen(3333);
-
-
-
-// rota = conjunto inteiro do get()
-// recurso = usuario
-
-// metodos HTTP = GET, POST, PUT, DELETE
-
-// GET = BUSCAR informaçao (lista, item)
-// POST = CRIAR uma informaçao
-
-// PUT = EDITAR uma informaçao
-// DELETE = DELETAR uma informaçao
-
-// parametros
-
-// Query params: http://localhost:3333/users?search=matheus&page=2
-// Route params: http://localhost:3333/users/1 (identificar um recurso)
-// Body: http://localhost:3333/users 
- 
-// requisiçao / resposta
-// localhost:3333
-// driver nativo, query buider, ->ORM<-
-// object relational mapping
-
