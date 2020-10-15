@@ -29,6 +29,7 @@ export default {
         return response.json(orphnageView.render(orphnage));
     },
 
+
     async create(request: Request, response: Response) {
         const {
             name,
@@ -55,7 +56,7 @@ export default {
             about,
             instructions,
             opening_hours,
-            open_on_weekends,
+            open_on_weekends: open_on_weekends === 'true',
             images
         };
 
@@ -80,7 +81,8 @@ export default {
         const orphnage = orphnagesRepository.create(data);
     
         await orphnagesRepository.save(orphnage);
-       
+        
         return response.status(201).json(orphnage);
-    }
+
+    }    
 }

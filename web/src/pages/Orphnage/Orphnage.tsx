@@ -1,14 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
 import { Map, Marker, TileLayer } from "react-leaflet";
-import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom' 
 
 import './orphnage.css';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import mapIcon from "../../utils/mapIcon";
+import api from "../../services/api";
+
+interface Orphnage {
+  latitude: number,
+  longitude: number,
+  name: string,
+  about: string,
+  instructions: string,
+  opening_hours: string,
+  open_on_weekends: string,
+  images: Array<{
+    url: string,
+    id: number,
+  }>;
+}
+
+interface OrphnageParams {
+  id: string;
+}
 
 export default function Orphnage() {
+  const params = useParams<OrphnageParams>();
+  const [orphnage, setOrphnage] = useState<Orphnage>();
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+    
+  useEffect(() => {
+      api.get(`orphnages/${params.id}`).then(response => {
+          setOrphnage(response.data);
+      })
+  }, [params.id]);
+
+  if (!orphnage) {
+    return <p>carregando.</p>;
+  }
 
   return (
     <div id="page-orphnage">
@@ -16,37 +48,32 @@ export default function Orphnage() {
 
       <main>
         <div className="orphnage-details">
-          <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
+          <img src={orphnage.images[activeImageIndex].url} alt={orphnage.name} />
 
           <div className="images">
-            <button className="active" type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
-            <button type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
-            <button type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
-            <button type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
-            <button type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
-            <button type="button">
-              <img src="https://3.bp.blogspot.com/-EqElGuRQtro/Wme6NFDjrAI/AAAAAAAASgk/tEva5-2RT_oajGsUXPdV0aoaiy1Uc0_ZwCLcBGAs/s1600/dp.jpg" alt="Lar das meninas" />
-            </button>
+            {orphnage.images.map((image, index) => {
+              return (
+                <button 
+                  key={image.id} 
+                  className={activeImageIndex === index ? 'active' : ''} 
+                  type="button" 
+                  onClick={() => {
+                    setActiveImageIndex(index)
+                  }}
+                >
+                  <img src={image.url} alt={orphnage.name} />
+                </button>
+              )
+            })}
           </div>
           
           <div className="orphnage-details-content">
-            <h1>Lar das meninas</h1>
-            <p>Presta assistência a crianças de 06 a 15 anos que se encontre em situação de risco e/ou vulnerabilidade social.</p>
-
+            <h1>{orphnage.name}</h1>
+            <p>{orphnage.about}</p>
             <div className="map-container">
               <Map 
-                center={[-27.2092052,-49.6401092]} 
-                zoom={16} 
+                center={[orphnage.latitude,orphnage.longitude]} 
+                zoom={14} 
                 style={{ width: '100%', height: 280 }}
                 dragging={false}
                 touchZoom={false}
@@ -55,32 +82,40 @@ export default function Orphnage() {
                 doubleClickZoom={false}
               >
                 <TileLayer 
-                  url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+                  url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 />
-                <Marker interactive={false} icon={mapIcon} position={[-27.2092052,-49.6401092]} />
+                <Marker interactive={false} icon={mapIcon} position={[orphnage.latitude,orphnage.longitude]} />
               </Map>
 
               <footer>
-                <Link to="#">Ver rotas no Google Maps</Link>
+                <a target="_blank" rel="noopener noreferrer" href={`https://google.com/maps/dir/?api=1&destination=${orphnage.latitude},${orphnage.longitude}`}>Ver rotas no Google Maps</a>
               </footer>
             </div>
 
             <hr />
 
             <h2>Instruções para visita</h2>
-            <p>Venha como se sentir mais à vontade e traga muito amor para dar.</p>
+            <p>{orphnage.instructions}</p>
 
             <div className="open-details">
               <div className="hour">
                 <FiClock size={32} color="#15B6D6" />
                 Segunda à Sexta <br />
-                8h às 18h
+                {orphnage.opening_hours}
               </div>
-              <div className="open-on-weekends">
-                <FiInfo size={32} color="#39CC83" />
-                Atendemos <br />
-                fim de semana
-              </div>
+              { orphnage.open_on_weekends ? (
+                <div className="open-on-weekends">
+                  <FiInfo size={32} color="#39CC83" />
+                  Atendemos <br />
+                  fim de semana
+                </div>
+              ) : (
+                <div className="open-on-weekends dont-open">
+                  <FiInfo size={32} color="#FF669D" />
+                  Não Atendemos <br />
+                  fim de semana
+                </div>
+              ) }
             </div>
 
             <button type="button" className="contact-button">
