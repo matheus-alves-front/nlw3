@@ -18,8 +18,6 @@ interface Orphnage {
 export default function OrphnagesMap() {
   const [orphnages, setOrphnages] = useState<Orphnage[]>([]);
   const navigation = useNavigation();  
-
-  console.log(orphnages);
   
   useFocusEffect(() => {
     api.get('/orphnages').then(response => {
