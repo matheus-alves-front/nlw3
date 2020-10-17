@@ -17,6 +17,7 @@ export default function OrphnageData() {
   const [name, setName ] = useState('');
   const [about, setAbout ] = useState('');
   const [instructions, setInstructions ] = useState('');
+  const [whatsapp, setWhatsapp ] = useState('');
   const [opening_hours, setOpening_hours ] = useState('');
   const [open_on_weekends, setOpen_on_weekends ] = useState(true);
   const [images, setImages] = useState<string[]>([])
@@ -37,6 +38,7 @@ export default function OrphnageData() {
     data.append('latitude', String(latitude));
     data.append('longitude', String(longitude));
     data.append('instructions', instructions);
+    data.append('whatsapp', whatsapp);
     data.append('opening_hours', opening_hours);
     data.append('open_on_weekends', String(open_on_weekends));
 
@@ -95,10 +97,12 @@ export default function OrphnageData() {
         onChangeText={setAbout}
       />
 
-      {/* <Text style={styles.label}>Whatsapp</Text>
+      <Text style={styles.label}>Whatsapp</Text>
       <TextInput
         style={styles.input}
-      /> */}
+        value={whatsapp}
+        onChangeText={setWhatsapp}
+      />
 
       <Text style={styles.label}>Fotos</Text>
 
@@ -120,7 +124,7 @@ export default function OrphnageData() {
 
       
 
-      <Text style={styles.title}>Visitação</Text>
+      <Text style={styles.title}>Sobre Sua Loja</Text>
 
       <Text style={styles.label}>Instruções</Text>
       <TextInput
@@ -130,7 +134,7 @@ export default function OrphnageData() {
         onChangeText={setInstructions}
       />
 
-      <Text style={styles.label}>Horario de visitas</Text>
+      <Text style={styles.label}>Horario de Funcionamento</Text>
       <TextInput
         style={styles.input}
         value={opening_hours}
@@ -138,7 +142,7 @@ export default function OrphnageData() {
       />
 
       <View style={styles.switchContainer}>
-        <Text style={styles.label}>Atende final de semana?</Text>
+        <Text style={styles.label}>Abre final de semana?</Text>
         <Switch 
           thumbColor="#fff" 
           trackColor={{ false: '#ccc', true: '#39CC83' }}

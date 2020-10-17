@@ -23,6 +23,9 @@ export default class Orphnage {
     instructions: string;
 
     @Column()
+    whatsapp: string;
+
+    @Column()
     opening_hours: string;
 
     @Column()

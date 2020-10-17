@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from 'express'
 import { ValidationError } from 'yup'
 
 interface ValidationsErrors {
-    [key: srting]: string[];
+    [key: string]: string[];
 }
 
 const errorHandler: ErrorRequestHandler = (error, request, response, next) => {

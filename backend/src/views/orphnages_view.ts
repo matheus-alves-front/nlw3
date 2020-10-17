@@ -10,6 +10,7 @@ export default {
             longitude: orphnage.longitude,
             about: orphnage.about,
             instructions: orphnage.instructions,
+            whatstapp: orphnage.whatsapp,
             opening_hours: orphnage.opening_hours,
             open_on_weekends: orphnage.open_on_weekends,
             images: imagesView.renderMany(orphnage.images)

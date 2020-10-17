@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class createOrphnages1602646731965 implements MigrationInterface {
+export class createOrphnages1602908682719 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         //criar ou alterar tabelas/campos etc
@@ -37,6 +37,10 @@ export class createOrphnages1602646731965 implements MigrationInterface {
                 },
                 {
                     name: 'instructions',
+                    type: 'text'
+                },
+                {
+                    name: 'whatsapp',
                     type: 'text'
                 },
                 {

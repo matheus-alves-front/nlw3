@@ -19,6 +19,7 @@ interface Orphnage {
     longitude: number;
     about: string;
     instructions: string;
+    whatsapp: string;
     opening_hours: string;
     open_on_weekends: boolean;
     images: Array<{
@@ -29,7 +30,7 @@ interface Orphnage {
 
 export default function OrphanageDetails() {
     const route = useRoute();
-    const [orphnage, setOrphnage] = useState();
+    const [orphnage, setOrphnage] = useState<Orphnage>();
 
     const params = route.params as OrphnageDetailsRouteParams;
 
@@ -46,7 +47,7 @@ export default function OrphanageDetails() {
             </View>
         );
     }
-
+    
     function handleOpenGoogleMapRoutes(){
         Linking.openURL(`https://maps.google.com/?q=${orphnage?.latitude},${orphnage?.longitude}`);
     }
@@ -128,7 +129,7 @@ export default function OrphanageDetails() {
 
         <RectButton style={styles.contactButton} onPress={() => {}}>
           <FontAwesome name="whatsapp" size={24} color="#FFF" />
-          <Text style={styles.contactButtonText}>Entrar em contato</Text>
+          <Text style={styles.contactButtonText}>Entrar em contato {orphnage.whatsapp}</Text>
         </RectButton>
       </View>
     </ScrollView>

@@ -21,7 +21,7 @@ export default function Routes() {
                     component={OrphnagesDetails} 
                     options={{
                         headerShown: true,
-                        header: () => <Header showCancel={false} title="Orfanato"/>
+                        header: () => <Header showCancel={false} title="Loja"/>
                     }}
                 />
                 <Screen name="SelectMapPosition" 
